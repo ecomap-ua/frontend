@@ -1,0 +1,16 @@
+# Directories #
+photos/
+node_modules/
+bower_components/
+dist/
+tmp/
+.tmp/
+.idea/
+
+# Files #
+*.DS_Store
+*.log
+frontend/app/templates/maintemplate.js
+frontend/app/templates/adminPage.html
+frontend/index_admin.html
+frontend/app/templates/map.html
