@@ -14,7 +14,7 @@ define(['./module'], function (services) {
         return{
             addVoteToDbAndToCookie: function (problemID,userID,userName,userSurname) {
 
-                return $http.post('/api/vote', {idProblem: problemID, userId: userID, userName: userName,userSurname:userSurname})
+                return $http.post('http://176.36.11.25:8090/api/vote', {idProblem: problemID, userId: userID, userName: userName,userSurname:userSurname})
                 .success(function (data, status, headers, config) {
                     ipCookie('vote' + problemID, true);
                 })
@@ -28,7 +28,7 @@ define(['./module'], function (services) {
                     return;
                 }
                 var data = {data: {userId: userID, userName: userName,userSurname:userSurname, Content: comment}};
-                return $http.post('/api/comment/' + problemID, JSON.stringify(data))
+                return $http.post('http://176.36.11.25:8090/api/comment/' + problemID, JSON.stringify(data))
                 .success(function (data, status, headers, config) {
 
                          updateScope(data);
@@ -39,7 +39,7 @@ define(['./module'], function (services) {
                 });
             },
             deleteCommentFromDB:function(id){
-                return $http.delete('/api/activity/' + id)
+                return $http.delete('http://176.36.11.25:8090/api/activity/' + id)
                     .success(function (data, status, headers, config) {
                           })
                     .error(function (data, status, headers, config) {

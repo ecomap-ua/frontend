@@ -10,11 +10,11 @@ define(['./module'], function (services) {
     services.factory('StatisticService', function ($http, ipCookie) {
         return{
             getStatistic4:function(){
-                return $http.get('/api/getStats4');
+                return $http.get('http://176.36.11.25:8090/api/getStats4');
 
             },
             getStatistic3:function(){
-                return $http.get('/api/getStats3');
+                return $http.get('http://176.36.11.25:8090/api/getStats3');
 
             },
             getChart:function(val){
@@ -22,7 +22,7 @@ define(['./module'], function (services) {
                 var lanes = [{"id":1},{"id":2},{"id":3},{"id":4},{"id":5},{"id":6},{"id":7}];
                 var colors = ["#095B0F", "#231F20", "#98442B", "#1B9AD6", "#71BF44", "#FFAB09", "#50095B"];
                 var color = ["#f00", "", "#00f"]
-                d3.xhr('api/getStats1')
+                d3.xhr('http://176.36.11.25:8090/api/getStats1')
                     .get(function(error, data) {
                         if (error) throw error;
                         var items = JSON.parse(data.response);
@@ -314,7 +314,7 @@ var mini = chart.append('g')
                     .attr("height", height)
                     .append("g")
                     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-                d3.xhr('api/getStats2/'+val)
+                d3.xhr('http://176.36.11.25:8090/api/getStats2/'+val)
                     .get(function(error, data) {
                         if (error) throw error;
                         data = JSON.parse(data.response);
