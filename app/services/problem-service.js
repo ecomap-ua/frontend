@@ -20,8 +20,14 @@ define(['./module'], function (services) {
                     url: 'http://localhost:8000/api/v1/allproblems'
                 });
             },
+            /*
             getProblemByIdFromDb:function(problemId) {
                 return $http.get("http://176.36.11.25:8090/api/problems/" + problemId);
+
+            },
+            */
+            getProblemDetails:function(problemId) {
+                return $http.get("http://localhost:8000/api/v1/problems/" + problemId);
 
             },
             deletePhotoFromdb:function(link){

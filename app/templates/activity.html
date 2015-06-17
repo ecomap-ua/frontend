@@ -9,15 +9,14 @@
     </div>
     <div ng-show="!isLoggedIn()" style="margin-top: 15px;margin-bottom: 15px;"><a class="tn-join-us" style="cursor: pointer;" ng-click="showRegForm('')">Зареєструйтесь</a> щоб залишити коментар</div>
     <div class="b-activity__comments">
-        <div class="b-activity__comments-item" ng-repeat="activity in activities" ng-show="checkpoint[activity.ActivityTypes_Id]">
-            <i class="fa {{icons[activity.ActivityTypes_Id]}} b-activity__comments-item-image" style="margin-left:5px;margin:0;padding:1px;display: inline-block;float:left;font-size: 24px;margin:0;line-height: 40px"></i>
+        <div class="b-activity__comments-item" ng-repeat="activity in activities">
             <div class="b-activity__comments-item-date">
-                <span><b>{{activity.Content.userName}} {{activity.Content.userSurname}}</b></span>
-                <span><b>{{activity.Date.substring(0,10)}}<br>{{activity.Date.substring(11,16)}}</b></span>
+                <span><b>{{activity.created_by}}</b></span>
+                <span><b>{{activity.created_date.substring(0,10)}}<br>{{activity.created_date.substring(11,16)}}</b></span>
             </div>
             <div class="b-activity__comments-item-content">
-                <span ng-show="activity.ActivityTypes_Id!=5">{{activity.Content.Content}}</span>
-                <span ng-show="activity.ActivityTypes_Id==5">{{activity.Content.Content}}
+                <span>{{activity.content}}</span>
+                <span ng-show="activity.ActivityTypes_Id==5">{{activity.content}}
                     <i ng-if="isAdministrator()" class="fa fa-close b-chat__newsItem-li-i"  ng-click="deleteComment(activity.Id)"></i></span>
             </div>
         </div>

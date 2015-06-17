@@ -40,6 +40,23 @@ define(['./module'], function(controllers){
         var problemModerationStatus;
         var tempContent = '';
         //get problem info
+        ProblemService.getProblemDetails($routeParams.problemID).success(function (data) {
+            if(data.error) {
+                $rootScope.$broadcast('Update',"_hide");
+                window.location.href="#/map";
+            } else {
+                $scope.problem = {};
+                $scope.problem.Severity = parseInt(data.severity) || 1;
+                $scope.problem.Content = data.content || 'опис відсутній';
+                $scope.problem.Title = data.title  || 'назва відсутня';
+                $scope.problem.CreatedDate = data.datetime;
+                $scope.problem.userName = data.name;
+                $scope.problem.Proposal = data.proposal;
+                $scope.problem.Votes = data.votes_numbers;
+                $scope.problem.status = data.status;
+            }
+        });
+        /*
         ProblemService.getProblemByIdFromDb($routeParams.problemID).success(function (data) {
             if(data.error) {
                 $rootScope.$broadcast('Update',"_hide");
@@ -121,7 +138,7 @@ define(['./module'], function(controllers){
             .error(function (data, status, headers, config) {
                 throw error;
             });
-
+        */
         //end get problem request info
 
 
