@@ -12,6 +12,10 @@ define(['./module'], function (services) {
 
     services.factory('ActivityService', function ($http, ipCookie) {
         return{
+            getProblemComments:function(problemId) {
+                return $http.get("http://localhost:8000/api/v1/problems/" + problemId + "/comments");
+
+            },
             addVoteToDbAndToCookie: function (problemID,userID,userName,userSurname) {
 
                 return $http.post('http://176.36.11.25:8090/api/vote', {idProblem: problemID, userId: userID, userName: userName,userSurname:userSurname})

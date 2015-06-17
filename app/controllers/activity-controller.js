@@ -27,5 +27,10 @@ define(['./module'], function (controllers) {
             });
 
         };
+        $scope.loadComments = function() {
+            ActivityService.getProblemComments($routeParams.problemID).success(function (data) {
+                $scope.activities = data.data;
+            });
+        };
     }]);
 });

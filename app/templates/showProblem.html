@@ -28,10 +28,13 @@
                 <div class="b-problem-deatiled-info-status__text" >
                     <div class="onoffswitch">
                         <input type="checkbox"   name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" ng-model="checkedbox"   ng-checked="checkedbox" ng-disabled="!isAdministrator()" >
+                        <!--
                         <label class="onoffswitch-label onoffswitch-label-notAdmin_{{!isAdministrator()}}" for="myonoffswitch">
                             <span class="onoffswitch-inner"></span>
                             <span class="onoffswitch-switch"></span>
                         </label>
+                         -->
+                        <label>{{problem.status}}</label>
                     </div>
                 </div>
                 <div class="b-problem-deatiled-info-votes">
@@ -93,7 +96,7 @@
                     </div>
                 </div>
             </tab>
-            <tab heading="Коментарі" class="b-problem-notAdmin_false">
+            <tab heading="Коментарі" class="b-problem-notAdmin_false" select="loadComments()">
                 <activity></activity>
             </tab>
         </tabset>
