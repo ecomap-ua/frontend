@@ -10,7 +10,7 @@ tmp/
 # Files #
 *.DS_Store
 *.log
-frontend/app/templates/maintemplate.js
-frontend/app/templates/adminPage.html
-frontend/index_admin.html
-frontend/app/templates/map.html
+app/templates/maintemplate.js
+app/templates/adminPage.html
+index_admin.html
+app/templates/map.html
