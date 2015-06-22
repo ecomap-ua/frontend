@@ -26,6 +26,7 @@ define(['./module'], function (services) {
                     throw error;
                 });
              },
+            /*
             addCommentToDB:function(userID,userName,userSurname,problemID,comment,updateScope) {
                 if(comment==""|| comment == undefined){
                     alert("Неможливо відправити пусте повідомлення");
@@ -42,6 +43,20 @@ define(['./module'], function (services) {
                     throw error;
                 });
             },
+            */
+            addCommentToDB:function(comment, problemID, userID) {
+                if(!comment){
+                    alert("Неможливо відправити пусте повідомлення");
+                    return;
+                }
+                var data = {user_id: userID, content: comment};
+                var req = {
+                    url: 'http://localhost:8000/api/v1/problems/' + problemID + '/comments',
+                    method: 'POST',
+                    data: JSON.stringify(data)
+                };
+                return $http(req);
+            },
             deleteCommentFromDB:function(id){
                 return $http.delete('http://176.36.11.25:8090/api/activity/' + id)
                     .success(function (data, status, headers, config) {
@@ -50,7 +65,6 @@ define(['./module'], function (services) {
                        throw error;
                 });
             }
-
         }
 
 

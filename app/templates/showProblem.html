@@ -39,7 +39,7 @@
                 </div>
                 <div class="b-problem-deatiled-info-votes">
                     <button class="simple_like_img"  ng-init="myvalue = false" ng-mousemove="myvalue= true" ng-mouseleave="myvalue= false" ng-click="addOneVote()" ng-disabled="disableVoteButton">
-                        <div class="b-hintVote" ng-class="{' label-success': myvalue}" ng-hide="!myvalue||disableVoteButton" >Голосувати</div>
+                        <div class="b-hintVote" ng-class="{' label-success': myvalue}" ng-hide="!myvalue||disableVoteButton">Голосувати</div>
                         <span ><i class="fa fa-fw" ng-class="{'simple_like_img-disable':disableVoteButton}"></i></span>
                     </button>
                     {{problem.Votes}}
