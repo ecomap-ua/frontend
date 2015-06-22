@@ -6,8 +6,9 @@
 
 define(['./app'], function (app) {
     'use strict';
-    return app.config(['$routeProvider', function ($routeProvider) {
-      $routeProvider
+    return app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
+        $httpProvider.defaults.withCredentials = true;
+        $routeProvider
           .when('/problem/showProblem/:problemID', {
               templateUrl: 'app/templates/showProblem.html',
               controller: 'showProblemCtrl'

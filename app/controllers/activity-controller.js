@@ -4,6 +4,7 @@ define(['./module'], function (controllers) {
 
     controllers.controller('ActivityCtrl', ['$scope', '$rootScope', '$routeParams','ActivityService', function ($scope,$rootScope, $routeParams,ActivityService) {
 
+        /*
         $scope.addComment = function(comment) {
             ActivityService.addCommentToDB($scope.userId,$scope.name,$scope.surname,$routeParams.problemID,comment,updateScope);
             function updateScope(data){
@@ -15,6 +16,13 @@ define(['./module'], function (controllers) {
                 }
                 $scope.commentContent="";
             }
+        };
+        */
+        $scope.addComment = function(comment) {
+            ActivityService.addCommentToDB(comment, $routeParams.problemID, $scope.userId)
+                .success(function (data, status, headers, config) {
+                    return $scope.loadComments();
+                });
         };
         $scope.deleteComment = function(commentId) {
             ActivityService.deleteCommentFromDB(commentId).then(function(){

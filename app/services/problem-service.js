@@ -20,12 +20,6 @@ define(['./module'], function (services) {
                     url: 'http://localhost:8000/api/v1/allproblems'
                 });
             },
-            /*
-            getProblemByIdFromDb:function(problemId) {
-                return $http.get("http://176.36.11.25:8090/api/problems/" + problemId);
-
-            },
-            */
             getProblemDetails:function(problemId) {
                 return $http.get("http://localhost:8000/api/v1/problems/" + problemId);
 
@@ -33,6 +27,14 @@ define(['./module'], function (services) {
             deletePhotoFromdb:function(link){
                 return $http.delete("http://176.36.11.25:8090/api/photo/"+link);
 
+            },
+            addVoteToDB:function(problemID) {
+                var req = {
+                    url: 'http://127.0.0.1:8000/api/v1/problems/' + problemID + '/vote',
+                    method: 'POST',
+                    data: null
+                };
+                return $http(req);
             }
 
         }

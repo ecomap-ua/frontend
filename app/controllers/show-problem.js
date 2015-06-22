@@ -159,6 +159,7 @@ define(['./module'], function(controllers){
                 clickable:".previews,.dropFieldForShowProblem",
 
                 previewsContainer:".previews"
+                //w
 
             }
         };
@@ -177,11 +178,11 @@ define(['./module'], function(controllers){
             $scope.showAddPhotoButton = true;
             //window.location.href="#/problem/showProblem/"+$routeParams.problemID;
         };
-
         $scope.addOneVote = function(){
-            ActivityService.addVoteToDbAndToCookie($routeParams.problemID,$scope.userId,$scope.name,$scope.surname).then(function(){
-              $scope.problem.Votes++;
-              $scope.disableVoteButton=true;
+            ProblemService.addVoteToDB($routeParams.problemID)
+                .then(function(){
+                    $scope.problem.Votes++;
+                    $scope.disableVoteButton=true;
             });
         };
         $scope.deletePhoto = function(index){
@@ -250,7 +251,7 @@ define(['./module'], function(controllers){
         };
         $scope.resetRating = function (rate){
             $scope.showStatus = false;
-            $scope.value = problem.Severity;
+            $scope.value = $scope.problem.Severity;
         }
         //hide popup message for user
         $scope.hideSeverityLabel = function(){
