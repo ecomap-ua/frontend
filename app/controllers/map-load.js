@@ -93,7 +93,7 @@ define(['./module'], function (controllers) {
                 });
 
                 //var marker = L.marker([location.Latitude, location.Longtitude], {icon: markerIcon});
-                var marker = L.marker([problem.lat, problem.lon], {icon: markerIcon});
+                var marker = L.marker([problem.Latitude, problem.Longitude], {icon: markerIcon});
                 marker.on('click', onMarkerClick);
                 marker._id = problem['id'];
                 markers.addLayer(marker);
