@@ -15,18 +15,13 @@ define(['./module'],function(controllers){
             // check to make sure the form is completely valid
             if (isValid  && ($scope.user.password == $scope.user.password_second)) {
                 UserService.register(data.first_name,data.last_name,data.email,data.password)
-                .success(function(data, status, headers, config) {
+                .success(function(userData) {
 
-                     UserService.logIn(newUser.email, newUser.password).success(function (userData) {
+                     //UserService.logIn(newUser.email, newUser.password).success(function (userData) {
                          $rootScope.successLogIn(userData);
+                         $scope.alerts.push({ type: 'success', msg: 'Ви успішно зареєструвались!'});
+                         $scope.formHide = true;
 
-                     }).error(function (status, data) {
-                         console.log(status);
-                         console.log(data);
-                     });
-                     $scope.formHide = true;
-
-                     $scope.alerts.push({type: 'success', msg: 'Ви успішно зареєструвались!'});
                  }).error(function(data, status, headers, config) {
                     if (status == 400)
                         $scope.wrongEmail = "Ваша пошта вже зайнята!";

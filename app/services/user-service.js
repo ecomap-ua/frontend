@@ -1,57 +1,61 @@
-define(['./module'], function (services) {
+define(['./module'], function(services) {
     'use strict';
 
-        
-    services.factory('UserService', function($http, ipCookie ) {
+
+    services.factory('UserService', function($http, ipCookie) {
         var saveChangeStatus = true;
         return {
-            logIn: function (email, password) {
-                return $http.post('http://176.36.11.25:8090/api/login', {email: email, password: password});
+            logIn: function(email, password) {
+                return $http.post('http://127.0.0.1:8000/api/login', {
+                    email: email,
+                    password: password
+                });
             },
 
-            logOut: function () {
+            logOut: function() {
                 if (saveChangeStatus) {
-                    return $http.get('http://176.36.11.25:8090/api/logout');
+                    return $http.get('http://127.0.0.1:8000/api/logout');
                 }
             },
 
-            register: function (username, surname, email, password) {
-                return $http.post('http://176.36.11.25:8090/api/register', { first_name: username, last_name: surname, email: email, password: password });
+            register: function(username, surname, email, password) {
+                return $http.post('http://127.0.0.1:8000/api/register', {
+                    first_name: username,
+                    last_name: surname,
+                    email: email,
+                    password: password
+                });
             },
 
-            isLoggedIn: function () {
-                if (ipCookie('token')) {
-                    return true;
-                } else {
-                    return false;
-                }
+            isLoggedIn: function() {
+                return !!ipCookie('user_id');
             },
 
-            isAdministrator: function () {
+            isAdministrator: function() {
                 if (ipCookie('userRole') == 'administrator') {
                     return true;
                 } else {
                     return false;
                 }
             },
-            setSaveChangeStatus: function (status) {
+            setSaveChangeStatus: function(status) {
                 saveChangeStatus = status;
             },
-            getSaveChangeStatus: function () {
+            getSaveChangeStatus: function() {
                 return saveChangeStatus;
             },
-            changePassword: function (dataPassword) {
-                return $http.post('http://176.36.11.25:8090/api/changePassword',dataPassword);
+            changePassword: function(dataPassword) {
+                return $http.post('http://176.36.11.25:8090/api/changePassword', dataPassword);
 
             },
-            resetPassword: function (data) {
-                return  $http.post('http://176.36.11.25:8090/api/resetPassword', data);
+            resetPassword: function(data) {
+                return $http.post('http://176.36.11.25:8090/api/resetPassword', data);
 
 
             }
         }
 
-        });
+    });
 
 
 });
