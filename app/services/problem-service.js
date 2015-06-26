@@ -20,11 +20,11 @@ define(['./module'], function(services) {
             getAllProblemsFromDb: function() {
                 return $http({
                     method: 'GET',
-                    url: 'http://localhost:8000/api/allproblems'
+                    url: 'http://127.0.0.1:8000/api/allproblems'
                 });
             },
             getProblemDetails: function(problemId) {
-                return $http.get("http://localhost:8000/api/problems/" + problemId);
+                return $http.get("http://127.0.0.1:8000/api/problems/" + problemId);
 
             },
             deletePhotoFromdb: function(link) {

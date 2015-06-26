@@ -1,6 +1,6 @@
-define(['./module'], function (controllers) {
+define(['./module'], function(controllers) {
     'use strict';
-    controllers.controller('mapLoadCtrl', ['$scope', 'ProblemService', '$rootScope', 'UserService', '$routeParams', '$route', '$location', 'todayTime', '$timeout', 'windowWidth', function ($scope, ProblemService, $rootScope, UserService, $routeParams, $route, $location, todayTime, $timeout, windowWidth) {
+    controllers.controller('mapLoadCtrl', ['$scope', 'ProblemService', '$rootScope', 'UserService', '$routeParams', '$route', '$location', 'todayTime', '$timeout', 'windowWidth', function($scope, ProblemService, $rootScope, UserService, $routeParams, $route, $location, todayTime, $timeout, windowWidth) {
         $scope.isAdministrator = UserService.isAdministrator;
         $scope.getWindowDimensions = windowWidth.getWindowDimensions;
 
@@ -19,7 +19,7 @@ define(['./module'], function (controllers) {
         });
         var latlng = L.latLng(50.00, 32.00);
 
-        L.Map.prototype.panToOffset = function (latlng, paddingL, paddingT, paddingR, paddingB) {
+        L.Map.prototype.panToOffset = function(latlng, paddingL, paddingT, paddingR, paddingB) {
             var x1 = latlng.lat - 0.01,
                 y1 = latlng.lng - 0.01,
                 x2 = latlng.lat + 0.01,
@@ -44,19 +44,19 @@ define(['./module'], function (controllers) {
         $scope.data = {};
         var markerIcon;
 
-        $rootScope.getProblemsAndPlaceMarkers = function () {
+        $rootScope.getProblemsAndPlaceMarkers = function() {
             ProblemService.getAllProblemsFromDb()
-                .success(function (data) {
+                .success(function(data) {
                     $scope.data = data;
                     placeMarkers($scope.data);
                 })
-                .error(function (data, status, headers, config) {
+                .error(function(data, status, headers, config) {
                     throw error;
                 });
         };
         $scope.getProblemsAndPlaceMarkers();
 
-        $scope.locateUser = function () {
+        $scope.locateUser = function() {
             navigator.geolocation.getCurrentPosition(getUserPosition);
             var width = $scope.getWindowDimensions();
 
@@ -85,7 +85,7 @@ define(['./module'], function (controllers) {
         function placeMarkers(data) {
             markers.clearLayers();
             var newData = userSelectionFilterMarkers(data);
-            angular.forEach(newData, function (problem) {
+            angular.forEach(newData, function(problem) {
                 markerIcon = L.icon({
                     //iconUrl : 'images/markers/'+location['ProblemTypes_Id']+ '.png',
                     iconUrl: 'images/markers/' + problem.problem_type_id + '.png',
@@ -157,7 +157,7 @@ define(['./module'], function (controllers) {
         ];
 
         $scope.placeUserProblemsChecker;
-        $scope.toggleSelection = function () {
+        $scope.toggleSelection = function() {
             if ($scope.placeUserProblemsChecker)
                 placeMarkers($scope.dataUserProblems);
             else
