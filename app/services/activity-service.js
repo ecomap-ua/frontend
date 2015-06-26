@@ -13,7 +13,7 @@ define(['./module'], function (services) {
     services.factory('ActivityService', function ($http, ipCookie) {
         return{
             getProblemComments:function(problemId) {
-                return $http.get("http://localhost:8000/api/problems/" + problemId + "/comments");
+                return $http.get("http://127.0.0.1:8000/api/problems/" + problemId + "/comments");
 
             },
             addVoteToDbAndToCookie: function (problemID,userID,userName,userSurname) {
@@ -51,7 +51,7 @@ define(['./module'], function (services) {
                 }
                 var data = {user_id: userID, content: comment};
                 var req = {
-                    url: 'http://localhost:8000/api/problems/' + problemID + '/comments',
+                    url: 'http://127.0.0.1:8000/api/problems/' + problemID + '/comments',
                     method: 'POST',
                     data: JSON.stringify(data)
                 };

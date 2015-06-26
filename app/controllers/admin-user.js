@@ -111,7 +111,7 @@ define(['./module'], function(controllers) {
 
             $scope.name = ipCookie('userName');
             $scope.surname = ipCookie('userSurname');
-            $scope.userId = ipCookie('id');
+            $scope.userId = ipCookie('user_id');
         }
 
         function successLogOut() {
