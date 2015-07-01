@@ -8,8 +8,9 @@ define(['./module'], function(services) {
      *
      */
 
-    services.factory('ProblemService', function($http, ipCookie) {
+    services.factory('ProblemService', function($http, CONSTANTS) {
         return {
+            //TODO: Need to delete with list of dependents
             getUserProblemsFromDb: function(userId) {
                 return $http({
                     method: 'GET',
@@ -20,26 +21,29 @@ define(['./module'], function(services) {
             getAllProblemsFromDb: function() {
                 return $http({
                     method: 'GET',
-                    url: 'http://127.0.0.1:8000/api/allproblems'
+                    url: CONSTANTS.API_URL + 'allproblems'
                 });
             },
             getProblemDetails: function(problemId) {
-                return $http.get("http://127.0.0.1:8000/api/problems/" + problemId);
+                return $http.get(CONSTANTS.API_URL + "problems/" + problemId);
 
             },
+            //TODO: need to change on new api
             deletePhotoFromdb: function(link) {
                 return $http.delete("http://176.36.11.25:8090/api/photo/" + link);
 
             },
             addVoteToDB: function(problemID) {
                 var req = {
-                    url: 'http://127.0.0.1:8000/api/problems/' + problemID + '/vote',
+                    url: CONSTANTS.API_URL + 'problems/' + problemID + '/vote',
                     method: 'POST',
                     data: null
                 };
                 return $http(req);
+            },
+            getProblemPhotos: function(problemID) {
+                return $http.get(CONSTANTS.API_URL + 'problems/' + problemID + '/photos');
             }
-
         }
 
 

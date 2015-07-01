@@ -27,7 +27,8 @@ require.config({
         'd3': '../bower_components/d3/d3',
         'angular-carousel':'../bower_components/angular-carousel/dist/angular-carousel',
         'ngLocale':'./js/angular-locale_uk-ua',
-        'app.templates':'./templates/maintemplate'
+        'app.templates':'./templates/maintemplate',
+        'angular-file-upload':'../bower_components/angular-file-upload/angular-file-upload'
 
 
 
@@ -89,6 +90,9 @@ require.config({
             deps: ['angular']
         },
         'app.templates': {
+            deps: ['angular']
+        },
+        'angular-file-upload': {
             deps: ['angular']
         }
 

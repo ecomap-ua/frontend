@@ -1,6 +1,6 @@
 define(['./module'], function(controllers){
     'use strict';
-    controllers.controller('showProblemCtrl',['$scope','$routeParams','ProblemService','ipCookie','$rootScope','$modal','adminToShowProblemService','$window','UserService','ActivityService','$route', function ($scope,$routeParams,ProblemService,ipCookie,$rootScope,$modal,adminToShowProblemService,$window, UserService,ActivityService,$route){
+    controllers.controller('showProblemCtrl',['$scope','$routeParams','ProblemService','ipCookie','$rootScope','$modal','adminToShowProblemService','$window','UserService','CommentService','$route','CONSTANTS', function ($scope,$routeParams,ProblemService,ipCookie,$rootScope,$modal,adminToShowProblemService,$window, UserService,CommentService,$route,CONSTANTS){
         $scope.isAdministrator = UserService.isAdministrator;
 
         if($scope.uploadRightSide){
@@ -19,17 +19,18 @@ define(['./module'], function(controllers){
 
         $rootScope.$broadcast('Update',"_problem");
         $rootScope.$emit('showSlider','false');
+        $scope.PHOTOS_URL = CONSTANTS.PHOTOS_URL;
         $scope.showSlider = false;
         $scope.showSliderFunc = function(){
             $rootScope.$emit('showSlider','true');
             $rootScope.$emit('get');
-        }
+        };
         if(ipCookie('vote'+$routeParams.problemID)==true){
           
           $scope.disableVoteButton=true;
-      }else{
+        } else{
           $scope.disableVoteButton=false;
-      }  
+        }
         $scope.showDropField = false;
         $scope.showAddPhotoButton = true;
         var userID;
@@ -50,134 +51,19 @@ define(['./module'], function(controllers){
                 $scope.problem.Content = data.content || 'опис відсутній';
                 $scope.problem.Title = data.title  || 'назва відсутня';
                 $scope.problem.CreatedDate = data.datetime;
-                $scope.problem.userName = data.name;
+                $scope.problem.userName = data.first_name;
+                $scope.problem.userSurname = data.last_name;
                 $scope.problem.Proposal = data.proposal;
                 $scope.problem.Votes = data.votes_numbers;
                 $scope.problem.status = data.status;
             }
         });
-        /*
-        ProblemService.getProblemByIdFromDb($routeParams.problemID).success(function (data) {
-            if(data.error) {
-                $rootScope.$broadcast('Update',"_hide");
-                window.location.href="#/map";
-            } else {
-                problem = data[0][0];
-                $scope.problem =  problem;
-                $scope.problem.Coordinates = {
-                    lat: data[0][0].Latitude,
-                    lng: data[0][0].Longtitude
-                };
-                activity = data[2][0];
-                userID =activity.Users_Id;
-                problemID = parseInt(problem.Id);
-                $scope.problem.Severity = parseInt(problem.Severity) || 1;
-                $scope.problem.Content = problem.Content || 'опис відсутній';
-                $scope.problem.Title = problem.Title || 'назва відсутня';
-                $scope.problem.CreatedDate =activity.Date;
-                $scope.photos = data[1];
-                $scope.path = "images/markers/" + problem.ProblemTypes_Id + ".png";
-                 var width = $scope.getWindowDimensions();
-                if (width < 1000) {
-                    $rootScope.map.panToOffset($scope.problem.Coordinates, 0, 90, 0, 0);
-                }else{
-                    $rootScope.map.panToOffset($scope.problem.Coordinates, 0, 0, 600 ,0);
-                }
-                $rootScope.photos = $scope.photos;
-                $scope.checkedbox = problem.Status?1:0;
-                problemModerationStatus = problem.Moderation ;
-                $scope.problem.Votes = problem.Votes;
-                var tempUser = JSON.parse(activity.Content);
-                $scope.problem.userName = tempUser.userName;
-                $scope.problem.Proposal = problem.Proposal;
 
-                $scope.activities = data[2].reverse();
-                for(var i=0;i<$scope.activities.length;i++){
-                    if($scope.activities[i].userId!=1) {
-                        $scope.activities[i].Content = JSON.parse($scope.activities[i].Content);
-                    }
-                }
-                $scope.$watch('checkedbox', function(newValue, oldValue) {
-                    if(newValue != oldValue ) {
-                        $scope.editStatusClass =  adminToShowProblemService.getEditStatus(1);
-                        $scope.problem.Status = newValue;
-                        UserService.setSaveChangeStatus(false);
-                    }
-                });
-                $scope.$watch('problem.Title', function(newValue, oldValue) {
-                    if(newValue != oldValue ){
-                        $scope.editStatusClass =  adminToShowProblemService.getEditStatus(1);
-                        $scope.problem.Title = newValue;
-                        UserService.setSaveChangeStatus(false);
-                    }
-                });
-                $scope.$watch('problem.Severity', function(newValue, oldValue) {
-                    if(newValue != oldValue ) {
-                        $scope.editStatusClass =  adminToShowProblemService.getEditStatus(1);
-                        $scope.problem.Severity = newValue;
-                        UserService.setSaveChangeStatus(false);
+        ProblemService.getProblemPhotos($routeParams.problemID).success(function (data) {
+            $scope.photos = data;
+        });
 
-                    }
-                });
-                $scope.$watch('problem.Content', function(newValue, oldValue) {
-                    if(newValue != oldValue && UserService.getSaveChangeStatus() == true) {
-                        $scope.problem.Content = newValue;
-                        UserService.setSaveChangeStatus(false);
-                        $scope.editStatusClass =  adminToShowProblemService.getEditStatus(1);
-                    }
-                });
-                $scope.$watch('problem.Proposal', function(newValue, oldValue) {
-                    if(newValue != oldValue && UserService.getSaveChangeStatus() == true) {
-                        $scope.problem.Proposal = newValue;
-                        UserService.setSaveChangeStatus(false);
-                        $scope.editStatusClass =  adminToShowProblemService.getEditStatus(1);
-                    }
-                });
-            }
-        })
-            .error(function (data, status, headers, config) {
-                throw error;
-            });
-        */
-        //end get problem request info
-
-
-        $scope.dropzoneConfig = {
-            'options':{autoProcessQueue:false,
-                url:'/api/photo/'+$routeParams.problemID,
-                method:"POST",
-                uploadMultiple:true,
-                maxFilesize:10,
-                parallelUploads:10,
-                thumbnailWidth:100,
-                thumbnailHeight:100,
-                acceptedFiles:'.jpg,.jpeg',
-               // dictFileTooBig: "Файл великого розміру ({{filesize}}MB). Максимальний розмір файлу: {{maxFilesize}}MB.",
-
-
-                //dictInvalidFileType:"Невірний формат файлу. Допустимі формати : jpg,jpeg",
-                clickable:".previews,.dropFieldForShowProblem",
-
-                previewsContainer:".previews"
-                //w
-
-            }
-        };
-        $scope.showDrop = function(){
-            if($scope.showDropField==false)
-            {
-                $scope.showDropField = true;
-                $scope.showAddPhotoButton = false;
-            }
-            else{
-                $scope.showDropField = false;
-            }
-        };
-        $scope.hideAddPhotoForm = function(){
-            $scope.showDropField = false;
-            $scope.showAddPhotoButton = true;
-            //window.location.href="#/problem/showProblem/"+$routeParams.problemID;
-        };
+        //TODO: Changed api, need to fix
         $scope.addOneVote = function(){
             ProblemService.addVoteToDB($routeParams.problemID)
                 .then(function(){
@@ -214,27 +100,8 @@ define(['./module'], function(controllers){
         $scope.icons[5]="fa-weixin";
 
 
-        $scope.checkpoint = [true,true,true,true,true,true];
-        $scope.filterActivity = function(i){
-
-            if($scope.checkpoint[i]==true){
-                $scope.checkpoint[i]=false;
-                $scope.x=0.3;
-
-            }
-            else{
-
-                $scope.checkpoint[i]=true;
-
-                $scope.x=0.7;
-
-            }
-
-        };
-
         //show message over the Severity rating
         $rootScope.isReadonly = $scope.isAdministrator()?false:true;
-        $scope.showStatus = false;
 
         var severityMessage = {
             1:'Локальна проблема (стосується будинку/двору)',
@@ -249,16 +116,17 @@ define(['./module'], function(controllers){
             $scope.showStatus = true;
             $scope.value = rate;
         };
+        //TODO:Need to refactor
+        /*
         $scope.resetRating = function (rate){
             $scope.showStatus = false;
-            $scope.value = $scope.problem.Severity;
-        }
+        };
         //hide popup message for user
         $scope.hideSeverityLabel = function(){
             $scope.severityMessage = "";
             $scope.showStatus = false;
         };
-        
+        */
         
         //if user did not submit changes
         $scope.$on('$locationChangeStart', function(event,next) {
@@ -294,6 +162,7 @@ define(['./module'], function(controllers){
         };
 
         //addproblemtoDB
+        //TODO: Need to refactor
         $scope.addProblemToDB = function(){
             if(UserService.getSaveChangeStatus()){
                 $scope.notApproved = adminToShowProblemService.deleteNotApprovedProblemFromList(problem);
