@@ -107,29 +107,12 @@ define(['./module'],function (controllers){
         $scope.showRegFormButtonClick = function () {
             $scope.showRegForm = true;
         };
-
-        $scope.dropzoneConfig = {
-            'options':{autoProcessQueue:false,
-                url:'/api/problempost',
-                method:"POST",
-                uploadMultiple:true,
-                maxFilesize:10,
-                parallelUploads:10,
-                thumbnailWidth:100,
-                thumbnailHeight:100,
-                acceptedFiles:'.jpg,.jpeg,.img',
-                dictInvalidFileType:"Невірний формат файлу. Допустимі формати : jpg,jpeg,img",
-                clickable:".previews",
-                previewsContainer:".previews",
-                dictFileTooBig: "Файл великого розміру ({{filesize}}MB). Максимальний розмір файлу: {{maxFilesize}}MB.", 
-            }
-        }
-
+        //TODO: Need to refactor
         $scope.submitProblem = function() {
             location.href = "#/map";
             $rootScope.getProblemsAndPlaceMarkers();
             $scope.getUserProblems($scope.userId);
-        }
+        };
 
         $scope.$on('$routeChangeStart', function(event, next) { 
             $scope.clearGetCoordinatesListener();

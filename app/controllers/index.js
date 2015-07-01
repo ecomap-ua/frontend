@@ -14,6 +14,6 @@ define([
     './stats',
     './datepicker',
     './change-password',
-    './activity-controller',
+    './comment-controller',
     './reset-password'
 ], function () {});

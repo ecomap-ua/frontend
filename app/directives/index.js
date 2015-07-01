@@ -5,9 +5,8 @@
  * which avails each controller of, for example, the `config` constants object.
  **/
 define([
-    './dropzone-directive',
     './chat-directive',
-    './activity-directive',
+    './comment-directive',
     './chatUser-directive',
 	'./editProblemTitle',
     './editProblemContent',
@@ -17,7 +16,8 @@ define([
     './slider-directive',
     './closeBut',
     './editProblemProposal',
-    './goClick'
+    './goClick',
+    './fileUpload'
 
 
 
