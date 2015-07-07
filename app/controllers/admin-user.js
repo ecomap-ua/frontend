@@ -2,223 +2,206 @@ define(['./module'], function(controllers) {
 
     'use strict';
 
-    controllers.controller('AdminUserCtrl', ['$scope', '$rootScope', 'ProblemService', '$location', '$window', 'ipCookie', 'UserService', '$modal', '$log', function($scope, $rootScope, ProblemService, $location, $window, ipCookie, UserService, $modal, $log) {
+    controllers.controller('AdminUserCtrl', ['$scope', '$rootScope', 'ProblemService', '$location', '$window', 'ipCookie', 'UserService', '$modal', '$log',
+        function($scope, $rootScope, ProblemService, $location, $window, ipCookie, UserService, $modal, $log) {
 
-        $scope.isLoggedIn = UserService.isLoggedIn;
-        $scope.isAdministrator = UserService.isAdministrator;
-        $scope.name = ipCookie('userName');
-        $scope.surname = ipCookie('userSurname');
-        $scope.userId = ipCookie('user_id');
-
-
-        /**--- Getting reg usr problems ---*/
-        $scope.getUserProblems = function(userId) {
-            ProblemService.getUserProblemsFromDb(userId)
-                .success(function(data) {
-                    $scope.dataUserProblems = data;
-
-                })
-                .error(function(data, status, headers, config) {
-                    throw error;
-                });
-
-
-        }
-
-        if ($scope.userId) {
-            $scope.getUserProblems($scope.userId);
-        }
-        /*******************************/
-
-        /*******--- Login form ---******/
-        $scope.postLogIn = function() {
-            var data = {};
-            data.email = document.login.email.value;
-            data.password = document.login.password.value;
-
-            UserService.logIn(data.email, data.password).success(function(userData) {
-                $scope.successLogIn(userData);
-                $scope.getUserProblems($scope.userId);
-                $window.location.href = "/";
-            }).error(function(status, data) {
-                console.log(status);
-                console.log(data);
-            });
-        };
-        /*******************************/
-
-        /*****--- The main part of facebook authorization ---*****/
-        FB.init({
-            appId: '615883928521055',
-            cookie: true,
-            xfbml: true,
-            version: 'v2.1'
-        });
-
-        FB.getLoginStatus(function(response) {
-            statusChangeCallback(response);
-        });
-
-        function statusChangeCallback(response) {
-
-            // console.log(response);
-
-            if (response.status === 'connected') {
-                FB.api('/me', function(response) {
-
-                    UserService.logIn(response.email, response.id).success(function(userData) {
-
-                        $scope.successLogIn(userData);
-
-                    }).error(function(status, data) {
-                        console.log(status);
-                        console.log(data);
-
-                        UserService.register(response.first_name, response.last_name, response.email, response.id).success(function(userData) {
-
-                            $scope.successLogIn(userData);
-
-                        }).error(function(status, data) {
-                            console.log(status);
-                            console.log(data);
-                        });
-
-                    });
-                });
-
-            } else if (response.status === 'not_authorized') {
-                document.getElementById('status').innerHTML = 'Please log ' + 'into this app.';
-            }
-        }
-
-        /*********************************************************/
-
-
-        /*****--- The main part of vkontakte authorization ---*****/
-
-        /**********************************************************/
-
-        // This function is called after success login procedure
-        $rootScope.successLogIn = function(userData) {
-
-            ipCookie('userName', userData.first_name, {expires: 10});
-            ipCookie('userSurname', userData.last_name, {expires: 10});
-            // clean this stuff
-            ipCookie('userRole', userData.role, {expires: 10});
-            ipCookie('token', userData.token, {expires: 10});
-            ipCookie('id', userData.id, {expires: 10});
-            ipCookie('userEmail', userData.email, {expires: 10});
-
+            $scope.isLoggedIn = UserService.isLoggedIn;
+            $scope.isAdministrator = UserService.isAdministrator;
             $scope.name = ipCookie('userName');
             $scope.surname = ipCookie('userSurname');
             $scope.userId = ipCookie('user_id');
-        }
 
-        function successLogOut() {
-            ipCookie.remove('token');
-            ipCookie.remove('userName');
-            ipCookie.remove('userSurname');
-            ipCookie.remove('userRole');
-            ipCookie.remove('id');
-            ipCookie.remove('userEmail');
-            // this cookie is set by the backend
-            ipCookie.remove('user_id');
+            /**--- Getting reg usr problems ---*/
+            $scope.getUserProblems = function(userId) {
+                ProblemService.getUserProblemsFromDb(userId).success(
+                    function(data) {
+                        $scope.dataUserProblems = data;
+                    }
+                ).error(
+                    function(data, status, headers, config) {
+                        console.log(status);
+                        console.log(data);
+                    }
+                );
+            };
 
-        }
+            if ($scope.userId) {
+                console.log('getting reg usr problems');
+                $scope.getUserProblems($scope.userId);
+            }
 
-        $scope.showFiltersVar = false;
+            /*******--- Login form ---******/
+            $scope.postLogIn = function() {
+                var data = {};
+                data.email = document.login.email.value;
+                data.password = document.login.password.value;
 
-        $scope.showFilters = function() {
-            if ($scope.showFiltersVar === true)
-                $scope.showFiltersVar = false;
-            else
-                $scope.showFiltersVar = true;
-        }
+                UserService.logIn(data.email, data.password).success(
+                    function(userData) {
+                        $scope.successLogIn(userData);
+                        $scope.getUserProblems($scope.userId);
+                    }
+                ).error(
+                    function(status, data) {
+                        console.log(status);
+                        console.log(data);
+                    }
+                );
+            };
+            /*******************************/
 
-        $scope.logInFB = function logInFB() {
-            FB.login(function(response) {
+            /*****--- The main part of facebook authorization ---*****/
+            FB.init({
+                appId: '903837986321574',
+                cookie: true,
+                xfbml: true,
+                version: 'v2.3'
+            });
 
-                FB.getLoginStatus(function(response) {
-                    statusChangeCallback(response);
+            FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+            });
+
+            function statusChangeCallback(response) {
+                if (response.status === 'connected') {
+
+                    FB.api('/me', function(response) {
+                        UserService.logIn(response.email, response.id).success(
+                            function(userData) {
+                                $scope.successLogIn(userData);
+                            }
+                        ).error(
+                            function(status, data) {
+                                console.log(status);
+                                console.log(data);
+                            }
+                        );
+                    });
+
+                } else if (response.status === 'not_authorized') {
+                    document.getElementById('status').innerHTML = 'Please log into this app.';
+                }
+            }
+            /*********************************************************/
+
+            // This function is called after success login procedure
+            $rootScope.successLogIn = function(userData) {
+                ipCookie('userName', userData.first_name);
+                ipCookie('userSurname', userData.last_name);
+                ipCookie('userRoles', userData.user_roles);
+                ipCookie('userPerms', userData.user_perms);
+                // I need to set these here, because binding does not work
+                // for those above.
+                $scope.name = ipCookie('userName');
+                $scope.surname = ipCookie('userSurname');
+
+                console.log(ipCookie('userRoles'));
+                console.log(ipCookie('userPerms'));
+            };
+
+            $scope.showFiltersVar = false;
+
+            $scope.showFilters = function() {
+                if ($scope.showFiltersVar === true)
+                    $scope.showFiltersVar = false;
+                else
+                    $scope.showFiltersVar = true;
+            };
+
+            $scope.logInFB = function logInFB() {
+                FB.login(function(response) {
+
+                    FB.getLoginStatus(function(response) {
+                        statusChangeCallback(response);
+                    });
+
+                }, {
+                    scope: 'publish_stream,email'
                 });
+            };
 
-            }, {
-                scope: 'publish_stream,email'
-            });
-        }
+            $scope.register = function register(username, surname, email, password, cnfPassword) {
 
-        $scope.logIn = function logIn(email, password) {
+                //and here must be validation!
 
-            //here must be validation!
+                UserService.register(username, surname, email, password).success(
+                    function(userData) {
+                        $scope.successLogIn(userData);
 
-            UserService.logIn(email, password).success(function(userData) {
-                $scope.successLogIn(userData);
-            }).error(function(status, data) {
-                console.log(status);
-                console.log(data);
-            });
-        }
-
-        $scope.register = function register(username, surname, email, password, cnfPassword) {
-
-            //and here must be validation!
-
-            UserService.register(username, surname, email, password).success(function(userData) {
-                $scope.successLogIn(userData);
-            }).error(function(status, data) {
-                console.log(status);
-                console.log(data);
-            });
-        }
-
-        $scope.logOut = function logOut() {
-            successLogOut();
-            $rootScope.$broadcast('Update', "");
-            $window.location.href = "/";
-            FB.logout(function(response) {
-                console.log(response);
-            });
-
-        }
-
-        $scope.changePassword = function() {
-            console.log('change password called');
-            var modalInstance = $modal.open({
-                templateUrl: 'app/templates/changePassword.html',
-                controller: 'changePasswordCtrl',
-                size: 'sm',
-                resolve: {
-                    items: function() {
-                        return $scope.items;
                     }
-                }
-            });
-
-            modalInstance.result.then(function(selectedItem) {
-                $scope.selected = selectedItem;
-            }, function() {
-                $log.info('Modal dismissed at: ' + new Date());
-            });
-        }
-
-        $scope.resetPassword = function() {
-            console.log('reset password called');
-            var modalInstance = $modal.open({
-                templateUrl: 'app/templates/resetPassword.html',
-                controller: 'resetPasswordCtrl',
-                size: 'sm',
-                resolve: {
-                    items: function() {
-                        return $scope.items;
+                ).error(
+                    function(status, data) {
+                        console.log(status);
+                        console.log(data);
                     }
-                }
-            });
+                );
+            };
 
-            modalInstance.result.then(function(selectedItem) {
-                $scope.selected = selectedItem;
-            }, function() {
-                $log.info('Modal dismissed at: ' + new Date());
-            });
-        }
-    }]);
+            $scope.logOut = function logOut() {
+                successLogOut();
+                $rootScope.$broadcast('Update', "");
+                FB.logout(function(response) {
+                    console.log(response);
+                });
+            };
+
+            function successLogOut() {
+                // this cookie is set by the backend
+                ipCookie.remove('user_id');
+                ipCookie.remove('userName');
+                ipCookie.remove('userSurname');
+                ipCookie.remove('userRoles');
+                ipCookie.remove('userPerms');
+            }
+
+            $scope.changePassword = function() {
+                console.log('change password called');
+                var modalInstance = $modal.open(
+                    {
+                        templateUrl: 'app/templates/changePassword.html',
+                        controller: 'changePasswordCtrl',
+                        size: 'sm',
+                        resolve: {
+                            items: function() {
+                                return $scope.items;
+                            }
+                        }
+                    }
+                );
+
+                modalInstance.result.then(
+                    function(selectedItem) {
+                        $scope.selected = selectedItem;
+                    },
+                    function() {
+                        $log.info('Modal dismissed at: ' + new Date());
+                    }
+                );
+            };
+
+            $scope.resetPassword = function() {
+                console.log('reset password called');
+                var modalInstance = $modal.open(
+                    {
+                        templateUrl: 'app/templates/resetPassword.html',
+                        controller: 'resetPasswordCtrl',
+                        size: 'sm',
+                        resolve: {
+                            items: function() {
+                                return $scope.items;
+                            }
+                        }
+                    }
+                );
+
+                modalInstance.result.then(
+                    function(selectedItem) {
+                        $scope.selected = selectedItem;
+                    },
+                    function() {
+                        $log.info('Modal dismissed at: ' + new Date());
+                    }
+                );
+            };
+        }]);
 });

@@ -153,7 +153,7 @@ define(['./module'], function(controllers) {
 
         $scope.problemStatuses = [
             {name: 'SOLVED', selected: true},
-            {name: 'UNSOLVED', ecselected: true}
+            {name: 'UNSOLVED', selected: true}
         ];
 
         $scope.placeUserProblemsChecker;
