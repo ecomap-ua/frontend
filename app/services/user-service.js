@@ -32,26 +32,32 @@ define(['./module'], function(services) {
             },
 
             isAdministrator: function() {
-                if (ipCookie('userRole') == 'administrator') {
-                    return true;
-                } else {
-                    return false;
+                if (ipCookie('userRoles')) {
+                    return !!(~ipCookie('userRoles').search('admin'));
                 }
             },
+
+            // Check out all user permissions that are logged to the
+            // console when a user logs in.
+            checkPermission: function(name) {
+                return !!(~ipCookie('userPerms').search(name));
+            },
+
             setSaveChangeStatus: function(status) {
                 saveChangeStatus = status;
             },
+
             getSaveChangeStatus: function() {
                 return saveChangeStatus;
             },
+
             changePassword: function(dataPassword) {
                 return $http.post('http://176.36.11.25:8090/api/changePassword', dataPassword);
 
             },
+
             resetPassword: function(data) {
                 return $http.post('http://176.36.11.25:8090/api/resetPassword', data);
-
-
             }
         }
 
