@@ -17,7 +17,8 @@ define([
     './closeBut',
     './editProblemProposal',
     './goClick',
-    './fileUpload'
+    './fileUpload',
+    './canvasFileUpload'
 
 
 

@@ -2,7 +2,7 @@ define(['./module'],function(services) {
     'use strict';
 
 
-    services.factory('adminToShowProblemService', function($http, $modal, $rootScope, CONSTANTS) {
+    services.factory('adminToShowProblemService', function($http, $modal, $rootScope) {
         var notApproved = undefined;
         var notApprovedProblemListQty = 0;
         var adminMode = false;

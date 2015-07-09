@@ -7,6 +7,7 @@ define(['./module'], function (controllers) {
         $scope.addComment = function(comment) {
             ActivityService.postProblemComment(comment, $routeParams.problemID, $scope.userId)
                 .success(function (data, status, headers, config) {
+                    document.getElementById('commentAdd').value = '';
                     return $scope.loadComments();
                 });
         };

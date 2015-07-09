@@ -1,6 +1,6 @@
 define(['./module'], function(controllers){
     'use strict';
-    controllers.controller('showProblemCtrl',['$scope','$routeParams','ProblemService','ipCookie','$rootScope','$modal','adminToShowProblemService','$window','UserService','CommentService','$route','CONSTANTS', function ($scope,$routeParams,ProblemService,ipCookie,$rootScope,$modal,adminToShowProblemService,$window, UserService,CommentService,$route,CONSTANTS){
+    controllers.controller('showProblemCtrl',['$scope','$routeParams','ProblemService','ipCookie','$rootScope','$modal','adminToShowProblemService','$window','UserService','CommentService','$route','CONSTANTS','FileUploader', function ($scope,$routeParams,ProblemService,ipCookie,$rootScope,$modal,adminToShowProblemService,$window, UserService,CommentService,$route,CONSTANTS,FileUploader){
         $scope.isAdministrator = UserService.isAdministrator;
 
         if($scope.uploadRightSide){
@@ -8,14 +8,7 @@ define(['./module'], function(controllers){
         }
         $scope.fileSizeLeft = 20;
         $scope.fileCountLeft = 10;
-        adminToShowProblemService.setEditStatus($scope.isAdministrator());
-        $scope.editStatusClass = adminToShowProblemService.getEditStatus(3);
-        $scope.delStatus = adminToShowProblemService.getEditStatus(0);
-        if(adminToShowProblemService.getNotApprovedProblemListQty () != 0){
-            $scope.addStatus = adminToShowProblemService.getEditStatus(2);
-        }else{
-            $scope.addStatus = adminToShowProblemService.getEditStatus(3);
-        }
+
 
         $rootScope.$broadcast('Update',"_problem");
         $rootScope.$emit('showSlider','false');
@@ -40,6 +33,27 @@ define(['./module'], function(controllers){
         var tempStatus;
         var problemModerationStatus;
         var tempContent = '';
+
+        //file uploader for photo
+        $scope.uploader = new FileUploader({
+            url: CONSTANTS.API_URL + 'problems/' + $routeParams.problemID + '/photos',
+            withCredentials: true,
+            alias: 'photos'
+        });
+        $scope.uploadPhoto = function () {
+            $scope.uploader.onBeforeUploadItem = function (item) {
+                item.formData.push({"comments": item.comments});
+            };
+            $scope.uploader.uploadAll();
+            $scope.uploader.onCompleteAll = function () {
+                //$scope.myTest();
+                $route.reload();
+            };
+        };
+        $scope.cancelUploadPhoto = function () {
+            $scope.uploader.destroy();
+            $route.reload();
+        };
         //get problem info
         ProblemService.getProblemDetails($routeParams.problemID).success(function (data) {
             if(data.error) {
@@ -54,8 +68,14 @@ define(['./module'], function(controllers){
                 $scope.problem.userName = data.first_name;
                 $scope.problem.userSurname = data.last_name;
                 $scope.problem.Proposal = data.proposal;
-                $scope.problem.Votes = data.votes_numbers;
+                $scope.problem.Votes = data.number_of_votes;
                 $scope.problem.status = data.status;
+                var width = $scope.getWindowDimensions();
+                if (width < 1000) {
+                    $rootScope.map.panToOffset($scope.problem.Coordinates, 0, 90, 0, 0);
+                }else{
+                    $rootScope.map.panToOffset($scope.problem.Coordinates, 0, 0, 600 ,0);
+                }
             }
         });
 
@@ -127,7 +147,7 @@ define(['./module'], function(controllers){
             $scope.showStatus = false;
         };
         */
-        
+
         //if user did not submit changes
         $scope.$on('$locationChangeStart', function(event,next) {
             if (!UserService.getSaveChangeStatus()) {

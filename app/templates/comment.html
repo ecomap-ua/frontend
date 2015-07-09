@@ -1,6 +1,6 @@
 <div class="b-activity">
     <div ng-show="isLoggedIn()" class="form-group">
-        <textarea class="form-control" ng-model="commentContent" rows="4" placeholder="Тут можна залишити свій коментарій..." maxlength="500"></textarea>
+        <textarea id="commentAdd" class="form-control" ng-model="commentContent" rows="4" placeholder="Тут можна залишити свій коментарій..." maxlength="500"></textarea>
         <p class="help-block">(залишилось {{500 - commentContent.length}} символів)</p>
         <a href="" type="button" class="btn btn-default" ng-click="addComment(commentContent)">Додати</a>
     </div>
