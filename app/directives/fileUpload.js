@@ -2,31 +2,23 @@ define(['./module'],function(directives) {
     directives.directive('fileUpload', function() {
         return {
             restrict: 'E',
-            controller: ['$scope','$routeParams','FileUploader','CONSTANTS', function ($scope, $routeParams, FileUploader, CONSTANTS) {
-                var uploader = $scope.uploader = new FileUploader({
-                    url: CONSTANTS.API_URL + 'problems/' + $routeParams.problemID + '/photos',
-                    withCredentials: true,
-                    alias: 'photos'
-                });
-                // FILTERS
+            controller: function ($scope, $route, $location) {
 
-                uploader.filters.push({
-                    name: 'customFilter',
-                    fn: function (item /*{File|FileLikeObject}*/, options) {
-                        return this.queue.length < 10;
+                $scope.uploader.filters.push({
+                    name: 'imageFilter',
+                    fn: function(item /*{File|FileLikeObject}*/, options) {
+                        var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+                        return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
                     }
                 });
 
-                // CALLBACKS
 
-                uploader.onBeforeUploadItem = function (item) {
-                    item.formData.push({"comments": item.comments});
+                // CALLBACKS
+                $scope.uploader.onErrorItem = function(fileItem, response, status, headers) {
+                    $scope.file_error = response.message;
                 };
-                uploader.onCompleteAll = function () {
-                    //TODO: Need to add refreshing of photos when upload is complete
-                };
-            }],
+            },
             templateUrl: 'app/templates/fileUpload.html'
-        };
+        }
     });
-});
+})

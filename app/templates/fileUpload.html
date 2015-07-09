@@ -1,75 +1,65 @@
-<div class="container" nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">
+<div class="container-fluid" nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter" style="margin-left: -15px;">
 
     <div class="row">
 
-        <div class="col-md-3">
+        <div class="col-md-4" style="magrin-right: 20px;">
 
-            <h3>Select files</h3>
-
-            <!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
-            Multiple
-            <input type="file" nv-file-select="" uploader="uploader" multiple  /><br/>
+            <div style="position:relative; margin-top: 20px;">
+                <a class='btn btn-primary' href='javascript:;'>
+                    Додати фото
+                    <input id="file_uploader" accept="image/*" type="file" nv-file-select="" uploader="uploader" multiple style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40">
+                </a>
+                &nbsp;
+                <span class='label label-info' id="upload-file-info"></span>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-5" style="margin-bottom: 40px">
 
-            <h3>Upload queue</h3>
-            <p>Queue length: {{ uploader.queue.length }}</p>
 
-            <table class="table">
+    <div class="row" ng-show="uploader.getNotUploadedItems().length">
+
+        <div style="margin-left: 20px; margin-bottom: 40px; width: 500px;">
+            <table class="table" style="font-size: 0.8em;">
                 <thead>
                     <tr>
-                        <th width="50%">Name</th>
-                        <th ng-show="uploader.isHTML5">Size</th>
-                        <th ng-show="uploader.isHTML5">Progress</th>
-                        <th>Status</th>
-                        <th>Comment</th>
+                        <th ng-show="uploader.isHTML5">Фото</th>
+                        <!--<th width="50%">Назва фото</th>-->
+                        <th ng-show="uploader.isHTML5">Розмір</th>
+                        <th ng-show="uploader.isHTML5">Коментарі</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="item in uploader.queue">
-                        <td><strong>{{ item.file.name }}</strong></td>
-                        <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
-                        <td ng-show="uploader.isHTML5">
-                            <div class="progress" style="margin-bottom: 0;">
-                                <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-                            <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-                            <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-                        </td>
                         <td>
-                            <textarea name="comments" ng-model="item.comments" ></textarea>
+                            <!-- Image preview -->
+                            <!--auto height-->
+                            <!--<div ng-thumb="{ file: item.file, width: 100 }"></div>-->
+                            <!--auto width-->
+                            <!--<img ng-src="{ file: item._file, height: 100 }">-->
+                            <!--fixed width and height -->
+                            <!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>-->
+                            <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 60 }"></div>
+                        </td>
+                        <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                        <td>
+                          <div class="form-group">
+                            <textarea class="form-control" name="comments" ng-model="item.comments" style="height: 60px; resize: none;"></textarea>
+                          </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-
             <div>
-                <div>
-                    Queue progress:
+                <div style="font-size: 0.8em;">
+                    Прогрес:
                     <div class="progress" style="">
                         <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
                     </div>
                 </div>
-                <div class="row">
-                    <button type="button" class="btn btn-success btn-s col-md-4" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
-                        <span class="glyphicon glyphicon-upload"></span> Upload all
-                    </button>
-                    <button type="button" class="btn btn-warning btn-s col-md-4" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
-                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
-                    </button>
-                    <button type="button" class="btn btn-danger btn-s col-md-4" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
-                        <span class="glyphicon glyphicon-trash"></span> Remove all
-                    </button>
-                </div>
             </div>
+            <div ng-bind="file_error" style="font-size: 0.8em;"></div>
 
         </div>
 
     </div>
-
 </div>

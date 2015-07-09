@@ -63,6 +63,14 @@
                         </div>
                         <div ng-show="!isLoggedIn()" style="margin-top: 15px;margin-bottom: 15px;"><a class="tn-join-us" style="cursor: pointer;" ng-click="showRegForm('')">Зареєструйтесь</a> щоб додати фото</div>
                         <file-upload ng-show="isLoggedIn()"></file-upload>
+                        <div ng-show="uploader.getNotUploadedItems().length" style="overflow-x: hidden;">
+                            <button class="btn btn-success btn-s" ng-click="uploadPhoto()" ng-disabled="!uploader.getNotUploadedItems().length" style="font-size: 0.8em;">
+                                <span class="glyphicon glyphicon-upload"></span> Завантажити фото
+                            </button>
+                            <button class="btn btn-danger btn-s" ng-click="cancelUploadPhoto()" ng-disabled="!uploader.queue.length" style="font-size: 0.8em;">
+                                <span class="glyphicon glyphicon-trash"></span> Відміна
+                            </button>
+                        </div>
                     </div>
                 </div>
             </tab>

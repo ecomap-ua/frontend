@@ -18,6 +18,25 @@ define(['./module'], function(services) {
                 });
 
             },
+            postProblemToDb: function(title, content, proposal, latitude, longitude, problem_type_id) {
+                var data = {
+                    title: title,
+                    content: content,
+                    proposal: proposal,
+                    latitude: latitude,
+                    longitude: longitude,
+                    problem_type_id: problem_type_id,
+                    region_id: 1,
+                    severity: "1",
+                    status: "UNSOLVED"
+                };
+                var req = {
+                    url: CONSTANTS.API_URL + 'problems',
+                    method: 'POST',
+                    data: JSON.stringify(data)
+                };
+                return $http(req);
+            },
             getAllProblemsFromDb: function() {
                 return $http({
                     method: 'GET',
