@@ -2,7 +2,7 @@ define(['./module'], function(services) {
     'use strict';
 
 
-    services.factory('UserService', function($http, ipCookie) {
+    services.factory('UserService', function($http, ipCookie, CONSTANTS) {
         var saveChangeStatus = true;
         return {
             logIn: function(email, password) {
