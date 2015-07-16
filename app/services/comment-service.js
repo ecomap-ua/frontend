@@ -21,7 +21,7 @@ define(['./module'], function (services) {
                     alert("Неможливо відправити пусте повідомлення");
                     return;
                 }
-                var data = {user_id: userID, content: comment};
+                var data = {content: comment};
                 var req = {
                     url: CONSTANTS.API_URL + 'problems/' + problemID + '/comments',
                     method: 'POST',
