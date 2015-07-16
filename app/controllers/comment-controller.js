@@ -2,10 +2,10 @@ define(['./module'], function (controllers) {
 
     'use strict';
 
-    controllers.controller('CommentCtrl', ['$scope', '$rootScope', '$routeParams','CommentService', function ($scope,$rootScope, $routeParams,ActivityService) {
+    controllers.controller('CommentCtrl', ['$scope', '$rootScope', '$routeParams','CommentService', function ($scope,$rootScope, $routeParams,CommentService) {
 
         $scope.addComment = function(comment) {
-            ActivityService.postProblemComment(comment, $routeParams.problemID, $scope.userId)
+            CommentService.postProblemComment(comment, $routeParams.problemID, $scope.userId)
                 .success(function (data, status, headers, config) {
                     document.getElementById('commentAdd').value = '';
                     return $scope.loadComments();
@@ -24,7 +24,7 @@ define(['./module'], function (controllers) {
 
         };*/
         $scope.loadComments = function() {
-            ActivityService.getProblemComments($routeParams.problemID).success(function (data) {
+            CommentService.getProblemComments($routeParams.problemID).success(function (data) {
                 $scope.comments = data.data;
             });
         };

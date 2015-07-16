@@ -1,15 +1,22 @@
 define(['./module'], function (controllers) {
    'use strict';
     controllers.controller('editorCtrl',['$scope', '$rootScope', '$routeParams', '$location','ResourceService', function ($scope, $rootScope, $routeParams, $location,ResourceService) {
+
         if ($routeParams.Alias) {
-            ResourceService.getResourceFromDb($routeParams.Alias)
+
+            var page;
+                $rootScope.data.forEach(function(element) {
+                    if (element.alias == $routeParams.Alias) {page = element;};
+                });
+
+            ResourceService.getResourceFromDb(page.id)
                 .success(function(data) {
-                    $scope.resource = data[0];
-                    $scope.Alias = $scope.resource.Alias;
-                    $scope.Content = $scope.resource.Content;
-                    $scope.Title = $scope.resource.Title;
-                    $scope.IsResource = $scope.resource.IsResource;
-                    $scope.Id = $scope.resource.Id;
+                    $scope.resource = data;
+                    $scope.Alias = $scope.resource.alias;
+                    $scope.Content = $scope.resource.content;
+                    $scope.Title = $scope.resource.title;
+                    $scope.IsResource = $scope.resource.is_resource;
+                    $scope.Id = $scope.resource.id;
                 
             });
         }
@@ -19,7 +26,7 @@ define(['./module'], function (controllers) {
         $rootScope.$broadcast('Update', '_full');
         $scope.sendResource = function(Alias, Content, Title, IsResource, Id) {
                 if (Id){
-            ResourceService.editResourceAndSaveToDb(Id,{Alias: Alias, Content: Content, Title: Title, IsResource : IsResource})
+            ResourceService.editResourceAndSaveToDb(Id,{alias: Alias, content: Content, title: Title, is_resource : IsResource+""})
                 .success(function() {
                     $rootScope.getTitles();
                     $location.path('resources/' + Alias);
@@ -40,7 +47,7 @@ define(['./module'], function (controllers) {
                 });
        }
        else {
-                    ResourceService.addResourceToDb({ Alias: Alias, Content: Content, Title: Title, IsResource: IsResource})
+                    ResourceService.addResourceToDb({ alias: Alias, content: Content, title: Title, is_resource: IsResource+""})
                       .success(function() {
                             $rootScope.getTitles();
                             $location.path('resources/' + Alias);

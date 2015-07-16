@@ -137,7 +137,7 @@ define(['./module'], function(controllers){
             $scope.value = rate;
         };
         //TODO:Need to refactor
-        /*
+
         $scope.resetRating = function (rate){
             $scope.showStatus = false;
         };
@@ -146,7 +146,7 @@ define(['./module'], function(controllers){
             $scope.severityMessage = "";
             $scope.showStatus = false;
         };
-        */
+
 
         //if user did not submit changes
         $scope.$on('$locationChangeStart', function(event,next) {

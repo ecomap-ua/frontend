@@ -6,7 +6,8 @@ define(['./module'], function(controllers) {
         function($scope, $rootScope, ProblemService, $location, $window, ipCookie, UserService, $modal, $log) {
 
             $scope.isLoggedIn = UserService.isLoggedIn;
-            $scope.isAdministrator = UserService.isAdministrator;
+            $scope.isAdminist = UserService.isAdministrator;
+            $scope.checkPermission = UserService.checkPermission
             $scope.name = ipCookie('userName');
             $scope.surname = ipCookie('userSurname');
             $scope.userId = ipCookie('user_id');

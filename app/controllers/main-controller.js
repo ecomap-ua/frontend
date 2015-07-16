@@ -57,7 +57,8 @@ define(['./module'],function(controllers){
             $scope.editResource = function(Alias) {
                 window.location.href="#/editResource/"+ Alias;
             }
-        };
+            };
+
         $rootScope.$on("Update", function(event, message) {
             $scope.messageLog=$rootScope.messageLog;
 

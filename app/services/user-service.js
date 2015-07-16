@@ -40,7 +40,7 @@ define(['./module'], function(services) {
             // Check out all user permissions that are logged to the
             // console when a user logs in.
             checkPermission: function(name) {
-                return !!(~ipCookie('userPerms').search(name));
+                return !!(~ipCookie('userPerms').indexOf(name));
             },
 
             setSaveChangeStatus: function(status) {

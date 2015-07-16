@@ -19,10 +19,10 @@
     <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-init="getTitles()">
       <ul class="nav navbar-nav">
 
-        <li ng-repeat="title in data" ng-if="!title.IsResource" class="b-menu__button">
-            <a id="link" href="#/resources/{{title.Alias}}">{{title.Title}} </a>
-            <i class="fa fa-pencil fa-xs " ng-if="isAdministrator()" ng-click="editResource(title.Alias)"></i>
-            <i class="fa fa-trash fa-xs" ng-if="isAdministrator()" ng-click="deleteResource(title.Id)"></i>
+        <li ng-repeat="pages_data in data" ng-if="!pages_data.is_resource" class="b-menu__button">
+            <a id="link" href="#/resources/{{pages_data.alias}}">{{pages_data.title}} </a>
+            <i class="fa fa-pencil fa-xs " ng-if="checkPermission('PageHandler:PUT:ANY')" ng-click="editResource(pages_data.alias)"></i>
+            <i class="fa fa-trash fa-xs" ng-if="checkPermission('PageHandler:DELETE:ANY')" ng-click="deleteResource(pages_data.id)"></i>
         </li>
 
         <li class="dropdown">
@@ -30,12 +30,12 @@
             <span class="fa fa-caret-down"></span>
           </a>
           <ul class="dropdown-menu" id="b-header__resources">
-            <li ng-repeat="title in data" ng-if="title.IsResource">
-              <a id="link" href="#/resources/{{title.Alias}}">{{title.Title}}</a>
-              <i class="fa fa-pencil" ng-if="isAdministrator()" ng-click="editResource(title.Alias)"></i>
-              <i class="fa fa-trash" ng-if="isAdministrator()" ng-click="deleteResource(title.Id,title.Title)"></i>
+            <li ng-repeat="title in data" ng-if="title.is_resource">
+              <a id="link" href="#/resources/{{title.alias}}">{{title.title}}</a>
+              <i class="fa fa-pencil" ng-if="checkPermission('PageHandler:PUT:ANY')" ng-click="editResource(title.alias)"></i>
+              <i class="fa fa-trash" ng-if="checkPermission('PageHandler:DELETE:ANY')" ng-click="deleteResource(title.id,title.title)"></i>
             </li>
-            <li ng-if="isAdministrator()">
+            <li ng-if="checkPermission('PagesHandler:POST:ANY')">
                 <a href="#/addResource" class="b-menu__button"><i class="fa fa-plus"></i>  Додати новий ресурс</a>
             </li>
           </ul>
