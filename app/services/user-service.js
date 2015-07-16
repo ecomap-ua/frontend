@@ -2,11 +2,11 @@ define(['./module'], function(services) {
     'use strict';
 
 
-    services.factory('UserService', function($http, ipCookie) {
+    services.factory('UserService', function($http, ipCookie, CONSTANTS) {
         var saveChangeStatus = true;
         return {
             logIn: function(email, password) {
-                return $http.post('http://127.0.0.1:8000/api/login', {
+                return $http.post(CONSTANTS.API_URL+'login', {
                     email: email,
                     password: password
                 });
@@ -14,12 +14,12 @@ define(['./module'], function(services) {
 
             logOut: function() {
                 if (saveChangeStatus) {
-                    return $http.get('http://127.0.0.1:8000/api/logout');
+                    return $http.get(CONSTANTS.API_URL+'logout');
                 }
             },
 
             register: function(username, surname, email, password) {
-                return $http.post('http://127.0.0.1:8000/api/register', {
+                return $http.post(CONSTANTS.API_URL+'register', {
                     first_name: username,
                     last_name: surname,
                     email: email,
@@ -52,12 +52,12 @@ define(['./module'], function(services) {
             },
 
             changePassword: function(dataPassword) {
-                return $http.post('http://176.36.11.25:8090/api/changePassword', dataPassword);
+                return $http.post(CONSTANTS.API_URL+'changePassword', dataPassword);
 
             },
 
             resetPassword: function(data) {
-                return $http.post('http://176.36.11.25:8090/api/resetPassword', data);
+                return $http.post(CONSTANTS.API_URL+'resetPassword', data);
             }
         }
 
