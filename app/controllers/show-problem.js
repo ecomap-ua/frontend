@@ -70,6 +70,12 @@ define(['./module'], function(controllers){
                 $scope.problem.Proposal = data.proposal;
                 $scope.problem.Votes = data.number_of_votes;
                 $scope.problem.status = data.status;
+                $scope.path = "images/markers/" + data.problem_type_id + ".png";
+                $scope.problem.Coordinates = {
+                    lat: data.latitude,
+                    lng: data.longitude
+                };
+                console.log(data.latitude);
                 var width = $scope.getWindowDimensions();
                 if (width < 1000) {
                     $rootScope.map.panToOffset($scope.problem.Coordinates, 0, 90, 0, 0);
@@ -122,6 +128,7 @@ define(['./module'], function(controllers){
 
         //show message over the Severity rating
         $rootScope.isReadonly = $scope.isAdministrator()?false:true;
+        $scope.showStatus = false;
 
         var severityMessage = {
             1:'Локальна проблема (стосується будинку/двору)',
@@ -136,8 +143,7 @@ define(['./module'], function(controllers){
             $scope.showStatus = true;
             $scope.value = rate;
         };
-        //TODO:Need to refactor
-        /*
+
         $scope.resetRating = function (rate){
             $scope.showStatus = false;
         };
@@ -146,7 +152,6 @@ define(['./module'], function(controllers){
             $scope.severityMessage = "";
             $scope.showStatus = false;
         };
-        */
 
         //if user did not submit changes
         $scope.$on('$locationChangeStart', function(event,next) {
@@ -170,32 +175,6 @@ define(['./module'], function(controllers){
                 )
             }
         });
-
-        //save changes to db
-        $scope.saveChangestoDb = function() {
-            adminToShowProblemService.saveChangestoDbProblemDescription(problem, $scope.problem.Severity, $scope.problem.Content,$scope.problem.Proposal,$scope.problem.Title, $scope.checkedbox)
-                .then(function() {
-                    adminToShowProblemService.showScopeNotApprovedProblemFromList(problem);
-                    $scope.editStatusClass = adminToShowProblemService.getEditStatus(3);
-                    UserService.setSaveChangeStatus(true);
-                });
-        };
-
-        //addproblemtoDB
-        //TODO: Need to refactor
-        $scope.addProblemToDB = function(){
-            if(UserService.getSaveChangeStatus()){
-                $scope.notApproved = adminToShowProblemService.deleteNotApprovedProblemFromList(problem);
-                adminToShowProblemService.approveNotApprovedProblem(problem).then(function(){
-                    if(adminToShowProblemService.getNotApprovedProblemListQty()){
-                        adminToShowProblemService.showScopeNotApprovedProblemFromList($scope.notApproved[0]);
-                    } else {
-                        adminToShowProblemService.redirectToMap('#/map');
-                        $scope.swipeHide();
-                    }
-                })
-            }
-        }
 
         //delete problem from DB
         $scope.deleteProblemFromDb = function(){
