@@ -17,7 +17,6 @@ define(['./module'],function(services){
               .success(function (data, status, headers, config) {
               })
               .error(function (data, status, headers, config) {
-                  throw error;
               });
 
           },
@@ -28,7 +27,6 @@ define(['./module'],function(services){
 
               })
               .error(function(data,status,headers,config){
-                  throw error;
               });
 
           },
@@ -38,7 +36,6 @@ define(['./module'],function(services){
               .success(function (data, status, headers, config) {
               })
               .error(function (data, status, headers, config) {
-                  throw error;
               });
 
           }

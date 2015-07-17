@@ -9,7 +9,8 @@ define(['./module'], function (controllers) {
                 .success(function (data, status, headers, config) {
                     document.getElementById('commentAdd').value = '';
                     return $scope.loadComments();
-                });
+                })
+                .error(function (data, status, headers, config) {});
         };
         //TODO: Need to refactor this func
         /*$scope.deleteComment = function(commentId) {
@@ -24,9 +25,11 @@ define(['./module'], function (controllers) {
 
         };*/
         $scope.loadComments = function() {
-            CommentService.getProblemComments($routeParams.problemID).success(function (data) {
-                $scope.comments = data.data;
-            });
+            CommentService.getProblemComments($routeParams.problemID)
+                .success(function (data) {
+                    $scope.comments = data.data;
+                })
+                .error(function (data, status, headers, config) {});
         };
     }]);
 });
