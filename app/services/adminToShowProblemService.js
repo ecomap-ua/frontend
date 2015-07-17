@@ -2,7 +2,7 @@ define(['./module'],function(services) {
     'use strict';
 
 
-    services.factory('adminToShowProblemService', function($http, $modal, $rootScope) {
+    services.factory('adminToShowProblemService', function($http, $modal, $rootScope, CONSTANTS) {
         var notApproved = undefined;
         var notApprovedProblemListQty = 0;
         var adminMode = false;
@@ -32,10 +32,8 @@ define(['./module'],function(services) {
                     });
             },
 
-            deleteNotApprovedProblemDB:function(problem){
-                return $http({ method: 'DELETE', url: 'http://176.36.11.25:8090/api/problem/'+problem.Id })
-                    .success (function (data) {
-                    });
+            deleteNotApprovedProblemDB:function(problemID){
+                return $http({ method: 'DELETE', url: CONSTANTS.API_URL + 'problems/' + problemID });
             },
 
             deleteNotApprovedProblemFromList:function(problem){

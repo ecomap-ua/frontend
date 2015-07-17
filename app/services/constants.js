@@ -3,7 +3,8 @@ define(['./module'], function (services) {
 
     services.constant('CONSTANTS', {
         API_URL: 'http://127.0.0.1:8000/api/',
-        PHOTOS_URL: 'http://127.0.0.1:8000/static/photos/'
+        PHOTOS_URL: 'http://127.0.0.1:8000/static/photos/',
+        THUMBNAILS_URL: 'http://127.0.0.1:8000/static/thumbnails/'
     });
 
 });

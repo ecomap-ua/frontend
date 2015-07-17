@@ -1,6 +1,6 @@
 define(['./module'], function(controllers){
     'use strict';
-    controllers.controller('showProblemCtrl',['$scope','$routeParams','ProblemService','ipCookie','$rootScope','$modal','adminToShowProblemService','$window','UserService','CommentService','$route','CONSTANTS','FileUploader', function ($scope,$routeParams,ProblemService,ipCookie,$rootScope,$modal,adminToShowProblemService,$window, UserService,CommentService,$route,CONSTANTS,FileUploader){
+    controllers.controller('showProblemCtrl',['$scope','$routeParams','ProblemService','ipCookie','$rootScope','$modal','adminToShowProblemService','$window','UserService','$route','CONSTANTS','FileUploader', function ($scope,$routeParams,ProblemService,ipCookie,$rootScope,$modal,adminToShowProblemService,$window, UserService,$route,CONSTANTS,FileUploader){
         $scope.isAdministrator = UserService.isAdministrator;
 
         if($scope.uploadRightSide){
@@ -13,6 +13,8 @@ define(['./module'], function(controllers){
         $rootScope.$broadcast('Update',"_problem");
         $rootScope.$emit('showSlider','false');
         $scope.PHOTOS_URL = CONSTANTS.PHOTOS_URL;
+        $scope.THUMBNAILS_URL = CONSTANTS.THUMBNAILS_URL;
+
         $scope.showSlider = false;
         $scope.showSliderFunc = function(){
             $rootScope.$emit('showSlider','true');
@@ -69,7 +71,11 @@ define(['./module'], function(controllers){
                 $scope.problem.userSurname = data.last_name;
                 $scope.problem.Proposal = data.proposal;
                 $scope.problem.Votes = data.number_of_votes;
-                $scope.problem.status = data.status;
+                if (data.status == 'UNSOLVED') {
+                    $scope.problem.status = 'не вирішена';
+                } else {
+                    $scope.problem.status = 'вирішена';
+                }
                 $scope.path = "images/markers/" + data.problem_type_id + ".png";
                 $scope.problem.Coordinates = {
                     lat: data.latitude,
@@ -84,18 +90,21 @@ define(['./module'], function(controllers){
             }
         });
 
-        ProblemService.getProblemPhotos($routeParams.problemID).success(function (data) {
-            $scope.photos = data;
-        });
-
+        ProblemService.getProblemPhotos($routeParams.problemID)
+            .success(function (data) {
+                $rootScope.photos = data;
+            })
+            .error(function (data, status, headers, config) {});
         //TODO: Changed api, need to fix
         $scope.addOneVote = function(){
             ProblemService.addVoteToDB($routeParams.problemID)
                 .then(function(){
                     $scope.problem.Votes++;
                     $scope.disableVoteButton=true;
-            });
+                })
+                .error(function (data, status, headers, config) {});
         };
+
         $scope.deletePhoto = function(index){
             ProblemService.deletePhotoFromdb($scope.photos[index].Link)
                 .success(function (data, status, headers, config) {
@@ -184,26 +193,11 @@ define(['./module'], function(controllers){
                 adminToShowProblemService.showModalMessage(text, 'sm',approveCaption, cancelCaption).then(
                     function () {
                         if ($scope.isAdministrator()) {
-                            if (problemModerationStatus) {
-                                adminToShowProblemService.deleteNotApprovedProblemDB(problem).then(function () {
+                            adminToShowProblemService.deleteNotApprovedProblemDB($routeParams.problemID)
+                                .success(function(data) {
                                     window.location.href = "#/map";
-                                    $scope.swipeHide();
-                                    $rootScope.getProblemsAndPlaceMarkers();
                                 })
-                            } else {
-                                if (UserService.getSaveChangeStatus()) {
-                                    $scope.notApproved = adminToShowProblemService.deleteNotApprovedProblemFromList(problem);
-                                    adminToShowProblemService.deleteNotApprovedProblemDB(problem).then(function () {
-                                        if (adminToShowProblemService.getNotApprovedProblemListQty()) {
-                                            adminToShowProblemService.showScopeNotApprovedProblemFromList($scope.notApproved[0]);
-                                        } else {
-                                            adminToShowProblemService.redirectToMap('#/map');
-                                            $scope.swipeHide();
-
-                                        }
-                                    })
-                                }
-                            }
+                                .error(function (data, status, headers, config) {});
                         }
                     },
                     function () {

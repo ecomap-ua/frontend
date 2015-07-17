@@ -59,7 +59,7 @@
                     <div class="b-problem-deatiled-info-description-photos">
 
                         <div class="show_photo" ng-repeat="photo in photos">
-                            <img ng-src="{{PHOTOS_URL}}{{photo.name}}" class="b-details-body-problem-photo"/>
+                            <img ng-click="showSliderFunc()" ng-src="{{THUMBNAILS_URL}}{{photo.name}}" class="b-details-body-problem-photo"/>
                         </div>
                         <div ng-show="!isLoggedIn()" style="margin-top: 15px;margin-bottom: 15px;"><a class="tn-join-us" style="cursor: pointer;" ng-click="showRegForm('')">Зареєструйтесь</a> щоб додати фото</div>
                         <file-upload ng-show="isLoggedIn()"></file-upload>
