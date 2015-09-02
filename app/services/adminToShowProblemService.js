@@ -116,7 +116,7 @@ define(['./module'],function(services) {
 
             alertAddProblemSuccessAnonim: function (size){
                 var modalWindowScope = $rootScope.$new(),
-                                        modalInstance;
+                                       modalInstance;
 
                 $rootScope.closeAlert = function() {
                     modalInstance.close(console.log('alert closed'));

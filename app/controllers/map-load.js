@@ -141,14 +141,13 @@ define(['./module'], function(controllers) {
         }
 
         $scope.problemTypes = [
-            {name: 'problem_type_0', id: 1, selected: true},
-            {name: 'problem_type_1', id: 2, selected: true},
-            {name: 'problem_type_2', id: 3, selected: true},
-            {name: 'problem_type_3', id: 4, selected: true},
-            {name: 'problem_type_4', id: 5, selected: true},
-            {name: 'problem_type_5', id: 6, selected: true},
-            {name: 'problem_type_6', id: 7, selected: true},
-            {name: 'problem_type_7', id: 8, selected: true}
+            {name: 'Проблеми лісів', id: 1, selected: true},
+            {name: 'Сміттєзвалища', id: 2, selected: true},
+            {name: 'Незаконна забудова', id: 3, selected: true},
+            {name: 'Проблеми водойм', id: 4, selected: true},
+            {name: 'Загрози біорізноманіттю', id: 5, selected: true},
+            {name: 'Браконьєрство', id: 6, selected: true},
+            {name: 'Інші проблеми', id: 7, selected: true}
         ];
 
         $scope.problemStatuses = [
@@ -158,10 +157,7 @@ define(['./module'], function(controllers) {
 
         $scope.placeUserProblemsChecker;
         $scope.toggleSelection = function() {
-            if ($scope.placeUserProblemsChecker)
-                placeMarkers($scope.dataUserProblems);
-            else
-                placeMarkers($scope.data);
+            placeMarkers($scope.data);
         };
 
     }]);

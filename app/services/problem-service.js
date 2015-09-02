@@ -10,14 +10,6 @@ define(['./module'], function(services) {
 
     services.factory('ProblemService', function($http, CONSTANTS) {
         return {
-            //TODO: Need to delete with list of dependents
-            getUserProblemsFromDb: function(userId) {
-                return $http({
-                    method: 'GET',
-                    url: "http://176.36.11.25:8090/api/usersProblem/" + userId
-                });
-
-            },
             postProblemToDb: function(title, content, proposal, latitude, longitude, problem_type_id) {
                 var data = {
                     title: title,

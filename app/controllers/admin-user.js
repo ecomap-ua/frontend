@@ -13,23 +13,7 @@ define(['./module'], function(controllers) {
             $scope.userId = ipCookie('user_id');
 
             /**--- Getting reg usr problems ---*/
-            $scope.getUserProblems = function(userId) {
-                ProblemService.getUserProblemsFromDb(userId).success(
-                    function(data) {
-                        $scope.dataUserProblems = data;
-                    }
-                ).error(
-                    function(data, status, headers, config) {
-                        console.log(status);
-                        console.log(data);
-                    }
-                );
-            };
-
-            if ($scope.userId) {
-                console.log('getting reg usr problems');
-                $scope.getUserProblems($scope.userId);
-            }
+            //TODO in a new api
 
             /*******--- Login form ---******/
             $scope.postLogIn = function() {
@@ -40,12 +24,20 @@ define(['./module'], function(controllers) {
                 UserService.logIn(data.email, data.password).success(
                     function(userData) {
                         $scope.successLogIn(userData);
-                        $scope.getUserProblems($scope.userId);
+                        $rootScope.name = data.first_name;
+                        $rootScope.name = data.last_name;
+                        $window.location.href="/";
                     }
                 ).error(
-                    function(status, data) {
-                        console.log(status);
-                        console.log(data);
+                    function(data, status) {
+                        if (status == 400) {
+                            var modalInstance = $modal.open(
+                                {
+                                    template: '<div class="alert alert-danger fade in">Пароль або пошту введено невірно</div>',
+                                    size: "sm"
+                                }
+                            );
+                        }
                     }
                 );
             };
@@ -87,6 +79,7 @@ define(['./module'], function(controllers) {
 
             // This function is called after success login procedure
             $rootScope.successLogIn = function(userData) {
+                ipCookie('user_id', userData.user_id);
                 ipCookie('userName', userData.first_name);
                 ipCookie('userSurname', userData.last_name);
                 ipCookie('userRoles', userData.user_roles);
